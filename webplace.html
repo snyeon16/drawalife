@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create A Life</title>
+    <style>
+        body {     
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px;
+        }
+        canvas {
+            background-color: rgb(255, 246, 231);
+            width: 100%;
+            height: 100%;
+        }
+        button {
+            margin: 30px;
+            align-self: flex-end;
+            position:absolute;
+            
+        }
+    </style>
+    </head>
+    <body onload="loadDrawing()">
+        <canvas id = "webspace"></canvas>
+        <button onClick = "goToIndex()"> draw </button>
+        <script>
+            const canvas = document.getElementById("webspace");
+
+                canvas.setAttribute("width", window.innerWidth);
+                canvas.setAttribute("height", window.innerHeight);
+
+            const ctx = canvas.getContext('2d');
+            function loadDrawing(){
+                let drawing = JSON.parse(sessionStorage.getItem("drawingData"));
+                let drawing1 = JSON.parse(sessionStorage.getItem("drawingData1"));
+                let drawing2 = JSON.parse(sessionStorage.getItem("drawingData2"));
+               
+                    if (!drawing){
+                    return;
+                }
+                const strokeColors = drawing.colors;
+                const data = drawing.points;
+
+                 for(let i = 1; i<data.length; i++){
+                      const point = data[i];
+                      const prevPoint = data[i-1];
+                            if (point.move){
+                               ctx.strokeStyle = strokeColors[i-1];
+                               ctx.beginPath();
+                               ctx.moveTo(prevPoint.x/2 , prevPoint.y/2);
+                               ctx.lineTo(point.x/2, point.y/2);
+                               ctx.stroke();
+                               ctx.closePath();
+                                    }
+                                }
+                                
+                    if(!drawing1){return;}
+
+                const strokeColors1 = drawing1.colors;
+                const data1 = drawing1.points;
+
+                 for(let j = 1; j<data1.length; j++){
+                      const point = data1[j];
+                      const prevPoint = data1[j-1];
+                            if (point.move){
+                               ctx.strokeStyle = strokeColors1[j-1];
+                               ctx.beginPath();
+                               ctx.moveTo(prevPoint.x/2 , prevPoint.y/2);
+                               ctx.lineTo(point.x/2, point.y/2);
+                               ctx.stroke();
+                               ctx.closePath();
+                                    }
+                                }
+                
+                            
+
+                    if(!drawing2){return;}
+
+                    const strokeColors2 = drawing2.colors;
+                    const data2 = drawing2.points;
+                    for(let k = 1; k<data2.length; k++){
+                      const point = data2[k];
+                      const prevPoint = data2[k-1];
+                            if (point.move){
+                               ctx.strokeStyle = strokeColors2[k-1];
+                               ctx.beginPath();
+                               ctx.moveTo(prevPoint.x/2 , prevPoint.y/2);
+                               ctx.lineTo(point.x/2, point.y/2);
+                               ctx.stroke();
+                               ctx.closePath();
+                                    }
+                                }
+                
+                            
+                            }
+                
+       
+                
+            
+               
+               
+                
+            
+
+            function goToIndex(){
+                window.location.href = "index.html";
+            }
+        </script>
+    </body>
+    </html>

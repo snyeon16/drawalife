@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create A Life</title>
+    <style>
+        body {     
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px;
+        }
+        canvas {
+            background-color: rgb(255, 246, 231);
+            width: 100%;
+            height: 100%;
+        }
+        button {
+            margin: 30px;
+            /*align-self: flex-end;*/
+            position:absolute;
+            top:10px;
+        }
+        .color-btn{
+            width:30px;
+            height:30px;
+            border:0;
+            border-radius: 50%;
+           left:5%;
+        }
+        .color-btn:hover{
+            cursor: pointer;
+        }
+        .color-btn[data-color='black']{background:black; top:50px;}
+        .color-btn[data-color='hotpink']{background:hotpink; top:100px;}
+        .color-btn[data-color='blue']{background:blue; top:150px;}
+        .color-btn[data-color='green']{background:green; top:200px;}
+    </style>
+    </head>
+    <body>
+        <canvas id = "realCanvas"></canvas>
+        <div>
+            <button onClick="saveDrawing(); goToWebplace();" style="right:5%;">v</button>
+        </div>
+       
+        <div id="control">
+            <button class="color-btn" data-color="black"></button>
+            <button class="color-btn" data-color="hotpink"></button>
+            <button class="color-btn" data-color="blue"></button>
+            <button class="color-btn" data-color="green"></button>
+        </div>
+        <script>
+            const canvas = document.getElementById("realCanvas");
+
+            canvas.setAttribute("width", window.innerWidth);
+            canvas.setAttribute("height", window.innerHeight);
+
+            const ctx = canvas.getContext('2d');
+
+            const control = document.getElementById("control");
+
+            //ctx.fillRect(10,10,100,100);
+            
+            let drawing = false; 
+            let colorVal = 'black';
+
+            let data = []; //현재 좌표 저장할 곳 
+            let strokeColors = [];   //색상정보
+
+            //그리기 시작 (마우스 눌렀을 때)
+            canvas.addEventListener("mousedown", (e)=>{
+                drawing = true;
+                const { x, y } = getMousePos(e);
+                data.push({x,y,move:false});
+                strokeColors.push(colorVal);
+            });
+
+            //그리기 완료 (마우스 뗐을 떄)
+            canvas.addEventListener("mouseup", (e)=>{
+                drawing = false;
+            });
+
+            //그리는 중 (마우스 움질일 때)
+            canvas.addEventListener("mousemove", (e)=>{
+                if(drawing){
+                const { x, y } = getMousePos(e);
+                data.push({x,y,move:true});
+                
+                drawLine(x,y);
+                ctx.stroke();
+                strokeColors.push(colorVal);
+                }  // 누르고 있어야
+                
+            });
+
+            //색상 변환
+            control.addEventListener("click", (e)=>{
+                colorVal = e.target.getAttribute('data-color');
+                ctx.strokeStyle = colorVal;
+               
+            });
+
+
+            //let savedDrawing = [];
+            
+            
+            //마우스 위치 계산
+            function getMousePos(event){
+                const rect = canvas.getBoundingClientRect();
+                return{
+                    x: event.layerX,
+                    y: event.layerY 
+                };
+            }
+
+            //선 그리기
+            function drawLine(x,y){
+                if (data.length < 2) return;
+                const prev = data[data.length-2];
+                if(prev.move){
+                   
+                    ctx.beginPath();
+                    ctx.moveTo(prev.x, prev.y);
+                    ctx.lineTo(x,y);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+            }
+
+            function saveDrawing(){
+                if (data.length > 0){
+                    const drawingData = {
+                        colors: strokeColors,
+                        points: data
+                    };
+                    
+                    if(sessionStorage.getItem("drawingData")!=null && sessionStorage.getItem("drawingData1")!=null ){
+                        sessionStorage.setItem("drawingData2",JSON.stringify(drawingData));}
+                    else if(sessionStorage.getItem("drawingData")!=null){
+                        sessionStorage.setItem("drawingData1",JSON.stringify(drawingData));
+                    }
+                    else{
+                        sessionStorage.setItem("drawingData", JSON.stringify(drawingData));  
+                    }
+                    
+                    data = [];
+
+                    //strokeColors = [];
+                    
+                }
+            }
+            function goToWebplace(){
+                window.location.href = "webplace.html";
+            }
+        </script>
+    </body>
+    </html>
