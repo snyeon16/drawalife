@@ -10,17 +10,24 @@
     flex-direction: column;
     align-items: center;
     margin: 0px;
+    cursor: url('pencil.png') 0 50, auto;
         }
         canvas {
             background-color: rgb(255, 246, 231);
             width: 100%;
             height: 100%;
+            
         }
         button {
             margin: 30px;
             /*align-self: flex-end;*/
             position:absolute;
             top:10px;
+        }
+
+        .life {
+            background-color: rgb(255, 246, 231);
+            border: none;
         }
         .color-btn{
             width:30px;
@@ -29,8 +36,11 @@
             border-radius: 50%;
            left:5%;
         }
-        .color-btn:hover{
+        .life:hover{
             cursor: pointer;
+        }
+        .color-btn:hover{
+            cursor: url('pencil.png') 0 50, auto;
         }
         .color-btn[data-color='black']{background:black; top:50px;}
         .color-btn[data-color='hotpink']{background:hotpink; top:100px;}
@@ -41,7 +51,7 @@
     <body>
         <canvas id = "realCanvas"></canvas>
         <div>
-            <button onClick="saveDrawing(); goToWebplace();" style="right:5%;">v</button>
+            <button onClick="saveDrawing(); goToWebplace();" style="right:5%;" class="life";><img src="life.png" width="50"></button>
         </div>
        
         <div id="control">
@@ -57,6 +67,8 @@
             canvas.setAttribute("height", window.innerHeight);
 
             const ctx = canvas.getContext('2d');
+
+            
 
             const control = document.getElementById("control");
 
