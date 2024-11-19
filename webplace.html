@@ -20,13 +20,18 @@
             margin: 30px;
             align-self: flex-end;
             position:absolute;
+            border:none;
+            background-color: rgb(255, 246, 231);
             
+        }
+        button:hover{
+            cursor:pointer;
         }
     </style>
     </head>
     <body onload="loadDrawing()">
         <canvas id = "webspace"></canvas>
-        <button onClick = "goToIndex()"> draw </button>
+        <button onClick = "goToIndex()"> <img src="pencil.png"> </button>
         <script>
             const canvas = document.getElementById("webspace");
 
@@ -34,30 +39,61 @@
                 canvas.setAttribute("height", window.innerHeight);
 
             const ctx = canvas.getContext('2d');
+
+            //움직임관련
+            let moveDrawingX = 0;
+            let drawingSpeed = 0.008;
+
+            let moveDrawing1X = 0;
+            let drawing1Speed = 0.01;
+
+            let moveDrawing2X = 0;
+            let drawing2Speed = 0.012;
+
+           
+
+
             function loadDrawing(){
+                //불러오기
                 let drawing = JSON.parse(sessionStorage.getItem("drawingData"));
                 let drawing1 = JSON.parse(sessionStorage.getItem("drawingData1"));
                 let drawing2 = JSON.parse(sessionStorage.getItem("drawingData2"));
                
+                
+                //drawing
                     if (!drawing){
                     return;
                 }
+                ctx.clearRect(0,0,canvas.width,canvas.height);
                 const strokeColors = drawing.colors;
                 const data = drawing.points;
 
                  for(let i = 1; i<data.length; i++){
                       const point = data[i];
-                      const prevPoint = data[i-1];
+                      const prevPoint = data[i-1]; console.log(prevPoint);
                             if (point.move){
+
+                                moveDrawingX=moveDrawingX+drawingSpeed;
+                                let startDrawingY = 100;
+
                                ctx.strokeStyle = strokeColors[i-1];
                                ctx.beginPath();
-                               ctx.moveTo(prevPoint.x/2 , prevPoint.y/2);
-                               ctx.lineTo(point.x/2, point.y/2);
+                               ctx.moveTo(prevPoint.x/2 +moveDrawingX, prevPoint.y/2+startDrawingY );
+                               ctx.lineTo(point.x/2+moveDrawingX, point.y/2+startDrawingY );
                                ctx.stroke();
                                ctx.closePath();
                                     }
+                                    if(point.x/2+moveDrawingX > canvas.width){
+                                drawingSpeed=-drawingSpeed;
+                            }else if(point.x/2+moveDrawingX<0){
+                                drawingSpeed=-drawingSpeed;
+                            }  
                                 }
                                 
+
+
+
+                    //drawing1             
                     if(!drawing1){return;}
 
                 const strokeColors1 = drawing1.colors;
@@ -65,38 +101,70 @@
 
                  for(let j = 1; j<data1.length; j++){
                       const point = data1[j];
-                      const prevPoint = data1[j-1];
+                      const prevPoint = data1[j-1];console.log(prevPoint);
                             if (point.move){
+
+                                moveDrawing1X=moveDrawing1X+drawing1Speed;
+                                let startDrawing1Y = 200;
+
                                ctx.strokeStyle = strokeColors1[j-1];
                                ctx.beginPath();
-                               ctx.moveTo(prevPoint.x/2 , prevPoint.y/2);
-                               ctx.lineTo(point.x/2, point.y/2);
+                               ctx.moveTo(prevPoint.x/2 +moveDrawing1X , prevPoint.y/2 + startDrawing1Y);
+                               ctx.lineTo(point.x/2 +moveDrawing1X, point.y/2 + startDrawing1Y);
                                ctx.stroke();
                                ctx.closePath();
                                     }
+                                if(point.x/2+moveDrawing1X > canvas.width){
+                                drawing1Speed=-drawing1Speed;
+                            }else if(point.x/2+moveDrawing1X<0){
+                                drawing1Speed=-drawing1Speed;
+                            }  
                                 }
                 
                             
-
+                    //drawing2
                     if(!drawing2){return;}
-
+                    
                     const strokeColors2 = drawing2.colors;
                     const data2 = drawing2.points;
+                    
                     for(let k = 1; k<data2.length; k++){
+                        
                       const point = data2[k];
                       const prevPoint = data2[k-1];
+                      
+                     
                             if (point.move){
-                               ctx.strokeStyle = strokeColors2[k-1];
+                               
+                                moveDrawing2X=moveDrawing2X+drawing2Speed;
+                               // let startY = Math.floor(Math.random()*(100 - 0));
+                                //시작위치
+                                let startDrawing2Y = 300;
+
+                                ctx.strokeStyle = strokeColors2[k-1];
+                                
                                ctx.beginPath();
-                               ctx.moveTo(prevPoint.x/2 , prevPoint.y/2);
-                               ctx.lineTo(point.x/2, point.y/2);
+                              
+                               ctx.moveTo(prevPoint.x/2+moveDrawing2X , prevPoint.y/2+startDrawing2Y);
+                              
+                               ctx.lineTo(point.x/2+moveDrawing2X, point.y/2+startDrawing2Y);
+                               
                                ctx.stroke();
+                              
                                ctx.closePath();
-                                    }
+                             // console.log(moveDrawing2X);
                                 }
-                
-                            
+                               
+                            if(point.x/2+moveDrawing2X > canvas.width){
+                                drawing2Speed=-drawing2Speed;
+                            }else if(point.x/2+moveDrawing2X<0){
+                                drawing2Speed=-drawing2Speed;
+                            }    
+                                }  
+                            requestAnimationFrame(loadDrawing);
+                                
                             }
+                    
                 
        
                 
