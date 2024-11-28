@@ -3,168 +3,465 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create A Life</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
+    <title>DrawALife</title>
     <style>
-        body {     
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0px;
-    cursor: url('pencil.png') 0 50, auto;
+      @font-face {
+                font-family: 'neodgm';
+                src: url('neodgm.woff') format('woff');
+                
+            }
+        body{
+          background-color: #cfcaca;
         }
-        canvas {
-            background-color: rgb(255, 246, 231);
-            width: 100%;
-            height: 100%;
-            
-        }
-        button {
-            margin: 30px;
-            /*align-self: flex-end;*/
+        .blueborder{
             position:absolute;
-            top:10px;
+           top:0;
+           left:0;
+            background-color: #0055e6;
+            width:100%;
+            height: 40px;
+            border-top: 5px solid #5694ff;
+            border-left: 5px solid #5694ff;
+            border-bottom: 5px solid #003ea8;
+            border-right: 5px solid #003ea8;
+        }
+        .titletext{
+          position:absolute;
+          margin-top: 3px;
+          margin-left: 20px;
+          font-size: 32px;
+            color:#ffffff;
+            font-family: 'neodgm';
+            text-shadow: 4px 4px #003ea8;
+        }
+        
+        .leftinterface{
+          position:absolute;
+          width:162px;
+          height:94%;
+          top:50px;
+          left: 0;
+          background-color: #cfcaca;
+          border-top: 5px solid #e0dbdb;
+            border-left: 5px solid #e0dbdb;
+            border-bottom: 5px solid #6b6868;
+            border-right: 5px solid #6b6868;
+        }
+        .bottominterface{
+          position:absolute;
+          width:1520px;
+          height:213px;
+          top:770px;
+          left: 172px;
+          background-color: #cfcaca;
+          border-top: 5px solid #e0dbdb;
+            border-left: 5px solid #e0dbdb;
+            border-bottom: 5px solid #6b6868;
+            border-right: 5px solid #6b6868;
+        }
+        .rightinterface{
+          position:absolute;
+          float:right;
+          width:17px;
+          height:94%;
+          top:50px;
+          right: 0;
+          background-color: #cfcaca;
+          border-top: 5px solid #e0dbdb;
+            border-left: 5px solid #e0dbdb;
+            border-bottom: 5px solid #6b6868;
+            border-right: 5px solid #6b6868;
+        }
+        #x-btn{
+          position:absolute;
+          float:right;
+           top:5px;
+           right:5px;
+            background-color:#f2463a;
+            width:40px;
+            height: 40px;
+            border-top: 5px solid #ffa49d;
+            border-left: 5px solid #ffa49d;
+            border-bottom: 5px solid #a81c12;
+            border-right: 5px solid #a81c12;
+            text-align: center;
+            vertical-align: bottom;
+            font-size: 32px;
+            color:#ffffff;
+            font-family: 'neodgm';
+            text-shadow: 2px 2px #a81c12;
+        }
+        #x-btn:active{
+          background-color:#ff7a70;
         }
 
-        .life {
-            background-color: rgb(255, 246, 231);
-            border: none;
-        }
         .color-btn{
-            width:30px;
-            height:30px;
-            border:0;
-            border-radius: 50%;
-           left:5%;
+            position:absolute;
+            width:40px;
+            height:40px;
+            border-top: 2px solid #e0dbdb;
+            border-left: 2px solid #e0dbdb;
+            border-bottom: 2px solid #6b6868;
+            border-right: 2px solid #6b6868;
+            
+           bottom : 150px;
+          
         }
-        .life:hover{
-            cursor: pointer;
+        .color-btn:active{
+          mix-blend-mode: soft-light;
+            
         }
-        .color-btn:hover{
-            cursor: url('pencil.png') 0 50, auto;
+
+        .color-btn[data-color='black']{background:black; left:200px;}
+        .color-btn[data-color='yellow']{background:yellow; left:250px;}
+        .color-btn[data-color='orange']{background:orange; left:300px;}
+        .color-btn[data-color='red']{background:red; left:350px;}
+        .color-btn[data-color='hotpink']{background:hotpink; left:400px;}
+        .color-btn[data-color='orchid']{background:orchid; left:450px;}
+        .color-btn[data-color='darkviolet']{background:darkviolet; left:500px;}
+        .color-btn[data-color='indigo']{background:indigo; left:550px;}
+        .color-btn[data-color='blue']{background:blue; left:600px;}
+        .color-btn[data-color='lightskyblue']{background:lightskyblue; left:650px;}
+        .color-btn[data-color='palegreen']{background:palegreen; left:700px;}
+        .color-btn[data-color='green']{background:green; left:750px;}
+
+        #pencil{
+          border-top: 2px solid #e0dbdb;
+            border-left: 2px solid #e0dbdb;
+            border-bottom: 2px solid #6b6868;
+            border-right: 2px solid #6b6868;
+              background-color: #cfcaca;
+            position:absolute;
+            width:60px; height:60px; left:50px; top:60px;
+            align-content: center;
         }
-        .color-btn[data-color='black']{background:black; top:50px;}
-        .color-btn[data-color='hotpink']{background:hotpink; top:100px;}
-        .color-btn[data-color='blue']{background:blue; top:150px;}
-        .color-btn[data-color='green']{background:green; top:200px;}
+        
+        #pencil:active{
+          background-color: #e5dfdf;
+        }
+         
+        #eraser{
+          border-top: 2px solid #e0dbdb;
+            border-left: 2px solid #e0dbdb;
+            border-bottom: 2px solid #6b6868;
+            border-right: 2px solid #6b6868;
+          background-color: #cfcaca;
+            position:absolute;
+            width:60px; height:60px; left:50px; top:150px;
+            align-content: center;
+        }
+
+        #eraser:active{
+          background-color: #e5dfdf;
+        }
+
+        #hand{
+          border-top: 2px solid #e0dbdb;
+            border-left: 2px solid #e0dbdb;
+            border-bottom: 2px solid #6b6868;
+            border-right: 2px solid #6b6868;
+          background-color: #cfcaca;
+            position:absolute;
+            width:60px; height:60px; left:50px; top:240px;
+            align-content: center;
+        }
+
+        #hand:active{
+          background-color: #e5dfdf;
+        }
+
+       #canvas{
+        cursor : none;
+        padding: 20px;
+        float: right;
+        border: 2px;
+        border-color: black;
+       }
+        
     </style>
     </head>
     <body>
-        <canvas id = "realCanvas"></canvas>
-        <div>
-            <button onClick="saveDrawing(); goToWebplace();" style="right:5%;" class="life";><img src="life.png" width="50"></button>
-        </div>
-       
+      <div class = "blueborder"></div>
+      <button id="x-btn" onClick=" eraseallFunc();">X</button>
+       <div class="bottominterface"></div>
+      <div class="leftinterface"></div>
+      <div class="rightinterface"></div>
+     
+      <div class = "titletext">Draw A Life</div>
+      
+        <div id = "pencil" onClick="drawFunc();"><img src="pencil.png" width="60px"></div>
+        <div id = "eraser" onClick="eraselFunc()"><img src="eraser.png" width="60px"></div>
+        <div id = "hand" onClick="handFunc()"><img src="hand.png" width="60px"></div>
         <div id="control">
             <button class="color-btn" data-color="black"></button>
+            <button class="color-btn" data-color="yellow"></button>
+            <button class="color-btn" data-color="orange"></button>
+            <button class="color-btn" data-color="red"></button>
             <button class="color-btn" data-color="hotpink"></button>
+            <button class="color-btn" data-color="orchid"></button>
+            <button class="color-btn" data-color="darkviolet"></button>
+            <button class="color-btn" data-color="indigo"></button>
             <button class="color-btn" data-color="blue"></button>
+            <button class="color-btn" data-color="lightskyblue"></button>
+            <button class="color-btn" data-color="palegreen"></button>
             <button class="color-btn" data-color="green"></button>
         </div>
+        <div id="canvas"></div>
+        
+        
+        
         <script>
-            const canvas = document.getElementById("realCanvas");
+          
+ const control = document.getElementById("control");
+ let colorVal = 'black';
 
-            canvas.setAttribute("width", window.innerWidth);
-            canvas.setAttribute("height", window.innerHeight);
-
-            const ctx = canvas.getContext('2d');
-
-            
-
-            const control = document.getElementById("control");
-
-            //ctx.fillRect(10,10,100,100);
-            
-            let drawing = false; 
-            let colorVal = 'black';
-
-            let data = []; //현재 좌표 저장할 곳 
-            let strokeColors = [];   //색상정보
-
-            //그리기 시작 (마우스 눌렀을 때)
-            canvas.addEventListener("mousedown", (e)=>{
-                drawing = true;
-                const { x, y } = getMousePos(e);
-                data.push({x,y,move:false});
-                strokeColors.push(colorVal);
-            });
-
-            //그리기 완료 (마우스 뗐을 떄)
-            canvas.addEventListener("mouseup", (e)=>{
-                drawing = false;
-            });
-
-            //그리는 중 (마우스 움질일 때)
-            canvas.addEventListener("mousemove", (e)=>{
-                if(drawing){
-                const { x, y } = getMousePos(e);
-                data.push({x,y,move:true});
-                
-                drawLine(x,y);
-                ctx.stroke();
-                strokeColors.push(colorVal);
-                }  // 누르고 있어야
-                
-            });
-
-            //색상 변환
-            control.addEventListener("click", (e)=>{
+ control.addEventListener("click", (e)=>{
                 colorVal = e.target.getAttribute('data-color');
-                ctx.strokeStyle = colorVal;
                
             });
 
+let lifes = [];
+let clicked = false;
+let eraseclicked = false;
+let handclicked = false;
+let drawVal = "true";
+let eraseVal = "false";
+let handVal = "false";
+let s = 30;
 
-            //let savedDrawing = [];
-            
-            
-            //마우스 위치 계산
-            function getMousePos(event){
-                const rect = canvas.getBoundingClientRect();
-                return{
-                    x: event.layerX,
-                    y: event.layerY 
-                };
-            }
+class lifePath{
+  constructor(){
+    this.x = [];
+    this.y = [];
+    this.plusX = random(-0.2,0.2);
+    this.plusY =random(-0.2,0.2);
+    this.indrawing = true;
+    this.rad=0;
+    
+  }
+  
+    drag(_x, _y) {
+      this.x.push(_x);
+      this.y.push(_y);
+    }
+  
+    erase(__x,__y){
+      
+        for(let i = this.x.length-1; i>=0; i--){
+            let d = dist(__x,__y,this.x[i],this.y[i]);
+            if(d<s){
+                this.x.length = 0;
+                this.y.length = 0;
+            }          
+        }
+    }
 
-            //선 그리기
-            function drawLine(x,y){
-                if (data.length < 2) return;
-                const prev = data[data.length-2];
-                if(prev.move){
-                   
-                    ctx.beginPath();
-                    ctx.moveTo(prev.x, prev.y);
-                    ctx.lineTo(x,y);
-                    ctx.stroke();
-                    ctx.closePath();
-                }
-            }
+    hand(___x,___y){
+      for(let i = this.x.length-1; i>=0; i--){
+            let d = dist(___x,___y,this.x[i],this.y[i]);
+            if(d<s+10){
+              this.x[i] = mouseX;
+              this.y[i] = mouseY;
+            }          
+        }
+}
 
-            function saveDrawing(){
-                if (data.length > 0){
-                    const drawingData = {
-                        colors: strokeColors,
-                        points: data
-                    };
-                    
-                    if(sessionStorage.getItem("drawingData")!=null && sessionStorage.getItem("drawingData1")!=null ){
-                        sessionStorage.setItem("drawingData2",JSON.stringify(drawingData));}
-                    else if(sessionStorage.getItem("drawingData")!=null){
-                        sessionStorage.setItem("drawingData1",JSON.stringify(drawingData));
-                    }
-                    else{
-                        sessionStorage.setItem("drawingData", JSON.stringify(drawingData));  
-                    }
-                    
-                    data = [];
 
-                    //strokeColors = [];
-                    
-                }
-            }
-            function goToWebplace(){
-                window.location.href = "webplace.html";
-            }
+  draw(){
+    if (this.indrawing == false){
+        let newChangeX = 
+        this.x[1]-this.x[0];
+        let newChangeY = 
+        this.y[1]-this.y[0];              
+      this.x.shift();
+      this.y.shift();
+      let newX = this.x[this.x.length-1] + (this.changeX);
+      let newY = this.y[this.y.length-1] + (this.changeY);
+      this.x.push(newX);
+      this.y.push(newY);
+      this.changeX = newChangeX;
+      this.changeY = newChangeY;
+      
+      
+      let cenX = 0, cenY = 0;
+      let maxX = 0, maxY = 0, minX = 0, minY = 0;
+    for(let i = 0; i<this.x.length; i++){
+        this.x[i] += this.plusX;
+        this.y[i] += this.plusY;
+        cenX += this.x[i];
+        cenY += this.y[i];
+    }
+     cenX /= this.x.length;
+      cenY /= this.y.length;
+      let margin = 150;
+      if (cenX<-margin){
+        for(let i = 0; i<this.x.length; i++){
+          this.x[i] += width+margin*2;
+        }
+      }
+      if(cenY<-margin){
+        for(let i = 0; i<this.y.length; i++){
+          this.y[i] += height+margin*2;
+        }}
+      if(cenX>width+margin){
+        for(let i = 0; i<this.x.length; i++){
+          this.x[i] -= width+margin*2;
+        } }
+      if(cenY>height+margin){
+        for(let i = 0; i<this.y.length; i++){
+          this.y[i] -= height+margin*2;
+        }
+      }
+      this.rad +=3;
+    }
+
+    noFill();
+    stroke( colorVal);
+    let move =0;
+    strokeCap(ROUND);
+    beginShape();
+    for(let i = 0; i<this.x.length; i++){
+      
+      if (this.indrawing == false){
+       s = (sin(radians(this.rad+i*5))*0.1+0.3)*30 + 15;
+      }
+      strokeWeight(s);
+
+      curveVertex(this.x[i], this.y[i]);
+      
+    }
+    endShape();
+    
+   /* noStroke();
+    fill(255,0,0);
+    for({
+      let s = (sin(radians(this.rad+i*20))*0.1+1)*30;
+      circle(this.x[i],this.y[i],s) ;
+    }*/
+ 
+  }
+   finished(){
+    this.indrawing = false;
+    this.changeX = this.x[1]-this.x[0];
+    this.changeY = this.y[1]-this.y[0];
+    console.log("finished");
+  }
+    
+       
+
+}
+
+let pencilImg;
+let eraserImg;
+let handImg;
+
+function preload(){
+ pencilImg = loadImage('/pencil.png');
+ eraserImg = loadImage('/eraser.png');
+ handImg = loadImage('/hand.png');
+}
+
+
+function setup(){
+  let canvasWindow = createCanvas(windowWidth-200, windowHeight-250);
+  canvasWindow.parent("canvas");
+}
+
+function windowResized(){
+  resizeCanvas(windowWidth-200, windowHeight-250);
+}
+
+function draw(){
+  background(255);
+   if(eraseVal == "true"){
+    image(eraserImg, mouseX, mouseY-47, 50,50)
+   } 
+   if(drawVal == "true"){image(pencilImg, mouseX, mouseY-47, 50,50);}
+    for(let i = 0; i<lifes.length; i++){
+    lifes[i].draw();
+  } 
+  if(handVal=="true"){
+    image(handImg, mouseX, mouseY, 50,50);
+  } 
+  
+}
+
+function mousePressed(){
+    if(drawVal == "true"){ 
+        clicked = true;
+        lifes.push(new lifePath());    
+    }
+    if(eraseVal == "true"){
+        eraseclicked = true;
+        }
+    if(handVal == "true"){
+        handclicked = true;
+    }
+    }
+  
+function mouseReleased(){
+    if(drawVal == "true"){ 
+        clicked = false; 
+        lifes[lifes.length-1].finished(); 
+    }
+    if(eraseVal == "true"){
+        eraseclicked = false;
+    }
+    if(handVal == "true"){
+        handclicked = false;
+    }
+}
+
+function mouseDragged(){
+  if(clicked == true){
+    lifes[lifes.length-1].drag(mouseX,mouseY);  
+  }
+  if(eraseclicked == true){
+    for(let i = 0; i<lifes.length; i++){
+        lifes[i].erase(mouseX,mouseY);
+    }
+  }
+  if(handclicked == true){
+    for(let i = 0; i<lifes.length; i++){
+      lifes[i].hand(mouseX,mouseY);
+    }  
+    }
+}
+
+function drawFunc(){
+    drawVal = "true";
+    eraseVal = "false";
+    handVal = "false";
+}
+function eraselFunc(){
+    drawVal = "false";
+    eraseVal = "true";
+    handVal = "false";
+    
+}
+function handFunc(){
+    drawVal = "false";
+    eraseVal = "false";
+    handVal = "true";
+    
+}
+
+function eraseallFunc(){
+    lifes=[];
+}
+
+/*hand(__x,__y){
+  for(let i = this.x.length-1; i>=0; i--){
+        let d = dist(__x,__y,this.x[i],this.y[i]);
+        if(d<s){
+          this.x[i] = i+mouseX;
+          this.y[i] = i+mouseY;
+        }          
+    }
+}*/
+
         </script>
     </body>
-    </html>
+</html>
+
